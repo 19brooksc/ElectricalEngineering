@@ -1,0 +1,45 @@
+' ElectricalEngineering
+' {$STAMP BS2sx}
+' {$PBASIC 2.5}
+
+DLeft   VAR Word
+DRight  VAR Word
+
+DO
+GOSUB LineFollow
+End
+LOOP
+
+
+SenseIR:
+
+  HIGH 7
+  PAUSE 1
+  RCTIME 1,1,DLeft
+  DEBUG HOME, ? DLeft/10
+
+  HIGH 7
+  PAUSE 1
+  RCTIME 5,1,DRight
+  DEBUG ? DRight/10
+
+RETURN
+
+LineFollow:
+
+DO
+GOSUB SenseIR
+IF DLeft/10 > DRight/10+100  THEN
+  PULSOUT 13, 900
+  PULSOUT 12, 900
+ELSEIF DRight/10 > DLeft/10+100  THEN
+  PULSOUT 13, 600
+  PULSOUT 12, 600
+ELSEIF DLEFT > 300 AND DRight > 300 THEN
+  RETURN
+ELSE
+  PULSOUT 13, 600
+  PULSOUT 12, 900
+ENDIF
+PAUSE 20
+LOOP
